@@ -4,6 +4,8 @@ from functools import wraps
 from flask import Flask, flash, redirect, render_template,\
 request, session, url_for, g
 
+from forms import AddTaskForm
+
 # config
 
 app = Flask(__name__)
@@ -79,7 +81,7 @@ def new_task():
     g.db = connect_db()
     name = request.form['name']
     date=request.form['due_date']
-    prority = reqest.form['priority']
+    priority = request.form['priority']
     if not name or not date or not priority:
         flash("All fields are required. Please complete all \
         fields.")
@@ -114,7 +116,7 @@ def complete(task_id):
 # Delete tasks
 @app.route('/delete/<int:task_id>/')
 @login_required
-def delete(task_id):
+def delete_entry(task_id):
     g.db = connect_db()
     g.db.execute(
         'DELETE FROM tasks WHERE task_id='+str(task_id))
