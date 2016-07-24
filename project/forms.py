@@ -3,14 +3,15 @@
 from flask_wtf import Form
 from wtforms import StringField, DateField, IntegerField, \
 SelectField, PasswordField 
-from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms.validators import DataRequired, Length, EqualTo,\
+Email
 
 class AddTaskForm(Form):
     task_id = IntegerField()
     name = StringField('Task Name', validators=[DataRequired()])
     due_date = DateField(
-        'Date Due (mm/dd/yyyy)', validators=[DataRequired()], 
-        format='%m/%d/%Y'
+        'Date Due (dd/mm/yyyy)', validators=[DataRequired()], 
+        format='%d/%m/%Y'
         )
     priority = SelectField(
         'Priority', validators=[DataRequired()], choices=[
@@ -27,7 +28,7 @@ class RegisterForm(Form):
         Length(min=6, max=25)]
         )
     email = StringField(
-        'Email', validators=[DataRequired(), \
+        'Email', validators=[DataRequired(), Email(), \
         Length(min=6, max=40)]
         )
     password = PasswordField(
@@ -36,7 +37,7 @@ class RegisterForm(Form):
         )
     confirm = PasswordField(
         'Repeat Password', validators=[DataRequired(), \
-        EqualTo('password', message='Passwords must match')]
+        EqualTo('password')]
         )
 
 class LoginForm(Form):
