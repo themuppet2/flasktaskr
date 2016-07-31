@@ -1,11 +1,11 @@
-# project/test.py
+# project/test_tasks.py
 
 import os
 import unittest
 
-from views import app, db
-from _config import basedir
-from models import User
+from project import app, db
+from project._config import basedir
+from project.models import Task, User
 
 TEST_DB = 'test_tasks.db'
 
@@ -78,7 +78,7 @@ class TasksTests(unittest.TestCase):
 
     def test_not_logged_in_users_cannot_access_tasks_page(self):
         response = self.app.get('tasks/', follow_redirects=True)
-        self.assertIn(b'You need to login first.', response.data)
+        self.assertIn(b'You need to log in first.', response.data)
 
     def test_users_can_add_tasks(self):
         self.create_user('user1234', 'user1234@test.com', 'userpassword')

@@ -3,9 +3,9 @@
 import os
 import unittest
 
-from views import app, db
-from _config import basedir
-from models import User
+from project import app, db
+from project._config import basedir
+from project.models import Task, User
 
 TEST_DB = 'test_users.db'
 
@@ -119,11 +119,11 @@ class UsersTests(unittest.TestCase):
             'userpassword')
         self.login('user1234', 'userpassword')
         response = self.logout()
-        self.assertIn(b'Goodbye.', response.data)
+        self.assertIn(b'Goodbye!', response.data)
 
     def test_not_logged_in_users_cannot_logout(self):
         response = self.logout()
-        self.assertNotIn(b'Goodbye.', response.data)
+        self.assertNotIn(b'Goodbye!', response.data)
 
     def test_default_user_role(self):
         db.session.add(
