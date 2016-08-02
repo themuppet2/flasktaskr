@@ -3,7 +3,7 @@
 import os
 import unittest
 
-from project import app, db
+from project import app, db, bcrypt
 from project._config import basedir
 from project.models import Task, User
 
@@ -17,9 +17,11 @@ class UsersTests(unittest.TestCase):
     def setUp(self):
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
+        app.config['DEBUG'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-        os.path.join(basedir, TEST_DB)
+            os.path.join(basedir, TEST_DB)
         self.app = app.test_client()
+        self.assertEqual(app.debug, False)
         db.create_all()
 
     # executed after each test
@@ -41,7 +43,11 @@ class UsersTests(unittest.TestCase):
         return self.app.get('logout/', follow_redirects=True)
 
     def create_user(self, name, email, password):
-        new_user = User(name=name, email=email, password=password)
+        new_user = User(
+            name=name,
+            email=email,
+            password=bcyrpt.generate_password_hash(password)
+        )
         db.session.add(new_user)
         db.session.commit()
 
